@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Mariana Porras — Senior Product Manager | Fintech & EdTech | B2B/B2C Digital Products | AI & User Experience | Product Strategy" />
+  <title>Mariana Porras — Senior Product Manager</title>
+
+  <style>
+    :root{
+      --bg:#f5f5f7;
+      --surface:rgba(255,255,255,.78);
+      --surface-solid:#ffffff;
+      --text:#1d1d1f;
+      --muted:#6e6e73;
+      --line:rgba(29,29,31,.10);
+      --accent:#0071e3;
+      --accent-soft:rgba(0,113,227,.10);
+      --shadow:0 24px 70px rgba(0,0,0,.08);
+      --radius-xl:32px;
+      --radius-lg:24px;
+      --radius-md:18px;
+      --max:1180px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(0,113,227,.08), transparent 28%),
+        radial-gradient(circle at 100% 25%, rgba(120,90,255,.07), transparent 24%),
+        var(--bg);
+      line-height:1.5;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%}
+
+    .shell{
+      width:min(calc(100% - 32px), var(--max));
+      margin:0 auto;
+    }
+
+    .nav{
+      position:sticky;
+      top:16px;
+      z-index:100;
+      padding-top:16px;
+    }
+
+    .nav-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+      padding:12px 14px 12px 18px;
+      border:1px solid rgba(255,255,255,.65);
+      background:rgba(255,255,255,.68);
+      backdrop-filter:blur(22px) saturate(180%);
+      -webkit-backdrop-filter:blur(22px) saturate(180%);
+      border-radius:999px;
+      box-shadow:0 10px 35px rgba(0,0,0,.06);
+    }
+
+    .brand{
+      font-weight:700;
+      letter-spacing:-.02em;
+      white-space:nowrap;
+    }
+
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .nav-links a{
+      color:var(--muted);
+      font-size:14px;
+      padding:8px 12px;
+      border-radius:999px;
+      transition:.2s ease;
+    }
+
+    .nav-links a:hover{
+      color:var(--text);
+      background:rgba(0,0,0,.05);
+    }
+
+    .nav-links .cta{
+      color:#fff;
+      background:var(--text);
+    }
+
+    .nav-links .cta:hover{
+      color:#fff;
+      background:#000;
+      transform:translateY(-1px);
+    }
+
+    .hero{
+      padding:92px 0 72px;
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:32px;
+      align-items:stretch;
+    }
+
+    .hero-copy,
+    .hero-card{
+      border:1px solid rgba(255,255,255,.75);
+      background:var(--surface);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius-xl);
+    }
+
+    .hero-copy{
+      padding:54px;
+      min-height:520px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      color:var(--accent);
+      font-size:14px;
+      font-weight:700;
+      letter-spacing:.01em;
+      margin-bottom:20px;
+    }
+
+    .eyebrow::before{
+      content:"";
+      width:8px;height:8px;
+      border-radius:50%;
+      background:var(--accent);
+      box-shadow:0 0 0 6px var(--accent-soft);
+    }
+
+    h1{
+      margin:0;
+      max-width:780px;
+      font-size:clamp(52px,7vw,92px);
+      line-height:.94;
+      letter-spacing:-.065em;
+      font-weight:760;
+    }
+
+    .hero-sub{
+      margin:28px 0 0;
+      max-width:760px;
+      font-size:clamp(20px,2vw,28px);
+      line-height:1.25;
+      letter-spacing:-.02em;
+      color:var(--muted);
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:34px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      min-height:48px;
+      padding:0 18px;
+      border-radius:999px;
+      font-weight:650;
+      font-size:15px;
+      transition:.22s ease;
+      border:1px solid var(--line);
+      background:#fff;
+    }
+
+    .btn:hover{transform:translateY(-2px)}
+    .btn.primary{
+      color:#fff;
+      background:var(--accent);
+      border-color:transparent;
+      box-shadow:0 10px 24px rgba(0,113,227,.22);
+    }
+
+    .hero-card{
+      padding:34px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .hero-card::after{
+      content:"";
+      position:absolute;
+      width:260px;height:260px;
+      border-radius:50%;
+      right:-90px;bottom:-80px;
+      background:linear-gradient(135deg, rgba(0,113,227,.22), rgba(128,90,255,.16));
+      filter:blur(4px);
+    }
+
+    .monogram{
+      width:86px;height:86px;
+      border-radius:26px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,#111,#3c3c43);
+      color:#fff;
+      font-weight:750;
+      font-size:30px;
+      letter-spacing:-.05em;
+      box-shadow:0 16px 32px rgba(0,0,0,.18);
+      position:relative;
+      z-index:2;
+    }
+
+    .quick{
+      position:relative;
+      z-index:2;
+      display:grid;
+      gap:18px;
+      margin-top:44px;
+    }
+
+    .quick-item{
+      padding-top:18px;
+      border-top:1px solid var(--line);
+    }
+
+    .quick-item small{
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      margin-bottom:5px;
+      font-weight:700;
+    }
+
+    .quick-item strong{
+      font-size:20px;
+      letter-spacing:-.02em;
+    }
+
+    section{
+      scroll-margin-top:110px;
+      padding:34px 0 86px;
+    }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:24px;
+      margin-bottom:28px;
+    }
+
+    .section-head h2{
+      margin:0;
+      font-size:clamp(38px,5vw,62px);
+      letter-spacing:-.05em;
+      line-height:1;
+    }
+
+    .section-head p{
+      margin:0;
+      max-width:520px;
+      color:var(--muted);
+      font-size:17px;
+    }
+
+    .grid{
+      display:grid;
+      gap:20px;
+    }
+
+    .bento{
+      grid-template-columns:repeat(12,1fr);
+    }
+
+    .card{
+      background:var(--surface-solid);
+      border:1px solid var(--line);
+      border-radius:var(--radius-lg);
+      box-shadow:0 14px 40px rgba(0,0,0,.045);
+      padding:28px;
+    }
+
+    .card h3{
+      margin:0 0 10px;
+      font-size:24px;
+      letter-spacing:-.03em;
+    }
+
+    .card p{
+      margin:0;
+      color:var(--muted);
+    }
+
+    .span-7{grid-column:span 7}
+    .span-5{grid-column:span 5}
+    .span-4{grid-column:span 4}
+    .span-8{grid-column:span 8}
+    .span-12{grid-column:span 12}
+
+    .skills{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .chip{
+      border:1px solid var(--line);
+      background:#fafafa;
+      padding:10px 13px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:600;
+    }
+
+    .timeline{
+      position:relative;
+      padding-left:24px;
+    }
+
+    .timeline::before{
+      content:"";
+      position:absolute;
+      left:6px;
+      top:10px;
+      bottom:10px;
+      width:1px;
+      background:var(--line);
+    }
+
+    .role{
+      position:relative;
+      padding:0 0 30px 24px;
+    }
+
+    .role:last-child{padding-bottom:0}
+
+    .role::before{
+      content:"";
+      position:absolute;
+      left:-23px;
+      top:8px;
+      width:12px;height:12px;
+      border-radius:50%;
+      background:#fff;
+      border:3px solid var(--accent);
+      box-shadow:0 0 0 5px var(--accent-soft);
+    }
+
+    .role-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:6px;
+    }
+
+    .company{
+      font-size:24px;
+      font-weight:720;
+      letter-spacing:-.03em;
+    }
+
+    .period{
+      color:var(--muted);
+      font-size:14px;
+      white-space:nowrap;
+      padding-top:4px;
+    }
+
+    .title{
+      color:var(--muted);
+      font-size:16px;
+    }
+
+    .meta{
+      margin-top:4px;
+      color:#9a9aa0;
+      font-size:14px;
+    }
+
+    .edu-list,
+    .cert-list{
+      display:grid;
+      gap:16px;
+      margin-top:16px;
+    }
+
+    .edu-item,
+    .cert-item{
+      padding:17px 0 0;
+      border-top:1px solid var(--line);
+    }
+
+    .edu-item:first-child,
+    .cert-item:first-child{
+      border-top:0;
+      padding-top:0;
+    }
+
+    .edu-item strong,
+    .cert-item strong{
+      display:block;
+      font-size:17px;
+      margin-bottom:4px;
+    }
+
+    .edu-item span,
+    .cert-item span{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .contact-card{
+      min-height:320px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      background:linear-gradient(145deg,#111113,#242428);
+      color:#fff;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .contact-card::after{
+      content:"";
+      position:absolute;
+      right:-60px;top:-50px;
+      width:230px;height:230px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(0,113,227,.55), rgba(0,113,227,0));
+    }
+
+    .contact-card h3,
+    .contact-card p,
+    .contact-links{position:relative;z-index:2}
+
+    .contact-card p{
+      color:rgba(255,255,255,.64);
+      max-width:540px;
+      font-size:18px;
+    }
+
+    .contact-links{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:26px;
+    }
+
+    .contact-links a{
+      border:1px solid rgba(255,255,255,.15);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      padding:11px 14px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:650;
+    }
+
+    footer{
+      padding:0 0 44px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .reveal{
+      opacity:0;
+      transform:translateY(16px);
+      transition:opacity .65s ease, transform .65s ease;
+    }
+    .reveal.visible{
+      opacity:1;
+      transform:none;
+    }
+
+    @media (max-width:900px){
+      .hero{
+        grid-template-columns:1fr;
+        padding-top:56px;
+      }
+      .hero-copy{min-height:auto;padding:38px}
+      .hero-card{min-height:360px}
+      .span-7,.span-5,.span-4,.span-8{grid-column:span 12}
+      .section-head{align-items:flex-start;flex-direction:column}
+      .role-top{flex-direction:column;gap:4px}
+      .period{white-space:normal}
+    }
+
+    @media (max-width:650px){
+      .shell{width:min(calc(100% - 20px),var(--max))}
+      .nav{top:8px;padding-top:8px}
+      .nav-inner{border-radius:24px;align-items:flex-start}
+      .nav-links a:not(.cta){display:none}
+      .hero{padding-top:34px}
+      .hero-copy{padding:30px;border-radius:26px}
+      .hero-card{padding:28px;border-radius:26px}
+      h1{font-size:52px}
+      .hero-sub{font-size:20px}
+      .section-head h2{font-size:42px}
+      .card{padding:22px;border-radius:20px}
+      .company{font-size:21px}
+      section{padding-bottom:64px}
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      *,*::before,*::after{transition:none!important;animation:none!important}
+      .reveal{opacity:1;transform:none}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="nav shell">
+    <div class="nav-inner">
+      <a class="brand" href="#top">Mariana Porras</a>
+      <div class="nav-links" aria-label="Primary">
+        <a href="#experience">Experience</a>
+        <a href="#education">Education</a>
+        <a href="#credentials">Credentials</a>
+        <a class="cta" href="mailto:marianaporras1@gmail.com">Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <main id="top" class="shell">
+    <section class="hero">
+      <div class="hero-copy reveal">
+        <div class="eyebrow">Product leadership · Mexico</div>
+        <h1>Mariana<br>Porras</h1>
+        <p class="hero-sub">
+          Senior Product Manager focused on Fintech, EdTech, B2B/B2C digital products,
+          AI, user experience and product strategy.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#experience">View experience</a>
+          <a class="btn" href="https://www.linkedin.com/in/marianaporras1" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </div>
+
+      <aside class="hero-card reveal">
+        <div class="monogram" aria-label="Mariana Porras initials">MP</div>
+        <div class="quick">
+          <div class="quick-item">
+            <small>Core focus</small>
+            <strong>Product Strategy</strong>
+          </div>
+          <div class="quick-item">
+            <small>Industries</small>
+            <strong>Fintech & EdTech</strong>
+          </div>
+          <div class="quick-item">
+            <small>Product types</small>
+            <strong>B2B / B2C Digital</strong>
+          </div>
+          <div class="quick-item">
+            <small>Language</small>
+            <strong>English</strong>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="about">
+      <div class="section-head reveal">
+        <h2>Profile</h2>
+        <p>A product career spanning digital media, commercial leadership, banking, payments, learning platforms and AI product management.</p>
+      </div>
+
+      <div class="grid bento">
+        <article class="card span-7 reveal">
+          <h3>Product perspective</h3>
+          <p>
+            Experience across product vision, program management and software development,
+            with a background that connects business strategy, customer experience and digital delivery.
+          </p>
+          <div class="skills" aria-label="Top skills">
+            <span class="chip">Product Vision</span>
+            <span class="chip">Program Management</span>
+            <span class="chip">Software Development</span>
+            <span class="chip">AI Product Management</span>
+            <span class="chip">Digital Products</span>
+          </div>
+        </article>
+
+        <article class="card span-5 reveal">
+          <h3>What I work on</h3>
+          <p>
+            Digital products and experiences at the intersection of business, technology and users,
+            with particular depth in Fintech, EdTech and platform-based products.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="section-head reveal">
+        <h2>Experience</h2>
+        <p>Progressive product and digital leadership experience from 2007 to the present.</p>
+      </div>
+
+      <div class="card reveal">
+        <div class="timeline">
+          <div class="role">
+            <div class="role-top">
+              <div>
+                <div class="company">TALISIS</div>
+                <div class="title">Product Manager</div>
+              </div>
+              <div class="period">June 2023 — Present</div>
+            </div>
+          </div>
+
+          <div class="role">
+            <div class="role-top">
+              <div>
+                <div class="company">UBITS</div>
+                <div class="title">Product Manager</div>
+              </div>
+              <div class="period">July 2021 — June 2023</div>
+            </div>
+          </div>
+
+          <div class="role">
+            <div class="role-top">
+              <div>
+                <div class="company">Kushki</div>
+                <div class="title">Product Manager</div>
+              </div>
+              <div class="period">November 2020 — July 2021</div>
+            </div>
+          </div>
+
+          <div class="role">
+            <div class="role-top">
+              <div>
+                <div class="company">PROSA</div>
+                <div class="title">Product Owner</div>
+                <div class="meta">Federal District, Mexico</div>
+              </div>
+              <div class="period">January 2020 — November 2020</div>
+            </div>
+          </div>
+
+          <div class="role">
+            <div class="role-top">
+              <div>
+                <div class="company">Actinver</div>
+                <div class="title">Product Manager / E-banking Manager</div>
+              </div>
+              <div class="period">October 2016 — December 2019</div>
+            </div>
+          </div>
+
+          <div class="role">
+            <div class="role-top">
+              <div>
+                <div class="company">Enlace Arquitectura</div>
+                <div class="title">Directora de Desarrollo comercial</div>
+              </div>
+              <div class="period">January 2016 — January 2017</div>
+            </div>
+          </div>
+
+          <div class="role">
+            <div class="role-top">
+              <div>
+                <div class="company">Clicker 360</div>
+                <div class="title">Head Of Sales Marketing</div>
+              </div>
+              <div class="period">September 2013 — August 2015</div>
+            </div>
+          </div>
+
+          <div class="role">
+            <div class="role-top">
+              <div>
+                <div class="company">Havas Media Mexico</div>
+                <div class="title">Digital Media Consultant</div>
+              </div>
+              <div class="period">April 2011 — September 2013</div>
+            </div>
+          </div>
+
+          <div class="role">
+            <div class="role-top">
+              <div>
+                <div class="company">Mkt Network</div>
+                <div class="title">Account and PR Executive</div>
+              </div>
+              <div class="period">January 2007 — March 2011</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="education">
+      <div class="section-head reveal">
+        <h2>Education</h2>
+        <p>Formal education and continued professional development in advertising, digital marketing and AI product management.</p>
+      </div>
+
+      <div class="grid bento">
+        <article class="card span-4 reveal">
+          <h3>Universidad de la Comunicación, S.C.</h3>
+          <div class="edu-list">
+            <div class="edu-item">
+              <strong>Advertising</strong>
+              <span>Academic background</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card span-4 reveal">
+          <h3>Digital Business Academy</h3>
+          <div class="edu-list">
+            <div class="edu-item">
+              <strong>Diplom, Digital Marketing</strong>
+              <span>2019 — 2020</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card span-4 reveal">
+          <h3>HelloPM</h3>
+          <div class="edu-list">
+            <div class="edu-item">
+              <strong>AI Product Manager</strong>
+              <span>Professional program</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card span-12 reveal">
+          <h3>Additional education</h3>
+          <div class="edu-list">
+            <div class="edu-item">
+              <strong>Centro Escolar del Paseo</strong>
+              <span>Listed in education background</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="credentials">
+      <div class="section-head reveal">
+        <h2>Credentials</h2>
+        <p>Scrum and product strategy certifications supporting product discovery, delivery and leadership.</p>
+      </div>
+
+      <div class="grid bento">
+        <article class="card span-7 reveal">
+          <h3>Certifications</h3>
+          <div class="cert-list">
+            <div class="cert-item">
+              <strong>Professional Scrum Product Owner™ I (PSPO I)</strong>
+              <span>Scrum.org credential</span>
+            </div>
+            <div class="cert-item">
+              <strong>Product Management: Building a Product Strategy</strong>
+              <span>Product strategy credential</span>
+            </div>
+            <div class="cert-item">
+              <strong>Professional Scrum Master</strong>
+              <span>Scrum credential</span>
+            </div>
+            <div class="cert-item">
+              <strong>Professional Scrum Product Owner</strong>
+              <span>Scrum product ownership credential</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card span-5 reveal">
+          <h3>Top skills</h3>
+          <div class="skills">
+            <span class="chip">Desarrollo de software</span>
+            <span class="chip">Gestión de programas</span>
+            <span class="chip">Visión de producto</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact">
+      <article class="card contact-card reveal">
+        <div>
+          <h3>Let’s build better products.</h3>
+          <p>
+            For product leadership, digital transformation, Fintech, EdTech or AI product opportunities,
+            feel free to connect.
+          </p>
+        </div>
+        <div class="contact-links">
+          <a href="mailto:marianaporras1@gmail.com">marianaporras1@gmail.com</a>
+          <a href="https://www.linkedin.com/in/marianaporras1" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="shell">
+    © <span id="year"></span> Mariana Porras. Designed as a clean, responsive single-page portfolio.
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.10 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
