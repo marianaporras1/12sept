@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Interactive RAG Architecture Simulator</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --accent-color: #3b82f6;
+      --accent-hover: #2563eb;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --chip-bg: #0f172a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      color: var(--accent-color);
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--text-muted);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 0.75rem;
+    }
+
+    .badge {
+      background-color: rgba(59, 130, 246, 0.2);
+      color: var(--accent-color);
+      font-size: 0.8rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-weight: normal;
+    }
+
+    textarea, input[type="text"] {
+      width: 100%;
+      background-color: #090d16;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      resize: vertical;
+    }
+
+    textarea:focus, input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+    }
+
+    button {
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background-color: var(--accent-hover);
+    }
+
+    /* Steps Display UI */
+    .chunks-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-height: 250px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+
+    .chunk-box {
+      background-color: var(--chip-bg);
+      border: 1px solid var(--card-border);
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      position: relative;
+    }
+
+    .chunk-box.retrieved {
+      border-color: var(--success);
+      background-color: rgba(16, 185, 129, 0.1);
+    }
+
+    .vector-tag {
+      font-family: monospace;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.4rem;
+      display: block;
+      word-break: break-all;
+    }
+
+    .similarity-tag {
+      float: right;
+      color: var(--success);
+      font-weight: bold;
+    }
+
+    .augmented-prompt-box {
+      background-color: #090d16;
+      border: 1px dashed var(--accent-color);
+      padding: 1rem;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      white-space: pre-wrap;
+      color: #e2e8f0;
+    }
+
+    .output-response {
+      background-color: #090d16;
+      border-left: 4px solid var(--success);
+      padding: 1rem;
+      border-radius: 4px;
+      line-height: 1.5;
+    }
+
+    /* Flow Indicators */
+    .step-indicator {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      background-color: var(--accent-color);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>RAG (Retrieval-Augmented Generation) Simulator</h1>
+    <p>Understand how custom documents are chunked, vectorized, retrieved, and sent to an LLM.</p>
+  </header>
+
+  <div class="container">
+    
+    <!-- Step 1 & 2: Ingestion & Vector DB Setup -->
+    <div class="card">
+      <div class="card-title">
+        <span class="step-indicator">1</span>
+        <span>Knowledge Base Ingestion & Vector Indexing</span>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+        Paste source documents below. Clicking Process will split text into chunks and convert text chunks into mock high-dimensional vector embeddings.
+      </p>
+      <textarea id="documentInput" rows="4" placeholder="Enter source text here...">
+The James Webb Space Telescope (JWST) was launched on December 25, 2021.
+JWST operates primarily in the infrared spectrum, allowing it to see through dense dust clouds.
+The primary mirror of JWST consists of 18 hexagonal mirror segments made of gold-plated beryllium.
+Hubble Telescope, by contrast, operates mainly in optical and ultraviolet spectrums.
+The target orbit for JWST is the second Lagrange point (L2), approximately 1.5 million kilometers from Earth.
+      </textarea>
+      <button onclick="processDocuments()">1. Chunk & Build Vector Database</button>
+
+      <div style="margin-top: 1.5rem;">
+        <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 0.5rem;">Vector Store Index (Chunks & Embeddings):</label>
+        <div id="chunksOutput" class="chunks-container">
+          <div style="color: var(--text-muted); font-size: 0.85rem;">Vector DB is currently empty. Click above to populate.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 & 4: Query & Retrieval -->
+    <div class="grid-2col">
+      <div class="card">
+        <div class="card-title">
+          <span class="step-indicator">2</span>
+          <span>User Query & Retrieval</span>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+          Enter a question. System embeds query, calculates Cosine Similarity against vector store, and returns Top-K matched contexts.
+        </p>
+        <input type="text" id="queryInput" value="What mirrors does JWST use and where is it located?" placeholder="Type query..." />
+        <button onclick="runRetrieval()">2. Retrieve Relevant Context</button>
+
+        <div style="margin-top: 1rem;">
+          <label style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.5rem;">Top Retrieved Contexts (k=2):</label>
+          <div id="retrievedOutput" class="chunks-container" style="max-height: 180px;">
+            <div style="color: var(--text-muted); font-size: 0.85rem;">No context retrieved yet.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5: Augmentation -->
+      <div class="card">
+        <div class="card-title">
+          <span class="step-indicator">3</span>
+          <span>Prompt Augmentation</span>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+          The system constructs a enriched prompt combining System Rules + Retrieved Context + Original Query.
+        </p>
+        <div id="augmentedPrompt" class="augmented-prompt-box">
+[Augmented prompt will be constructed here after retrieval...]
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 6: LLM Generation -->
+    <div class="card">
+      <div class="card-title">
+        <span class="step-indicator">4</span>
+        <span>LLM Final Output Generation</span>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+        The LLM generates an accurate answer grounded strictly in the provided retrieved context, reducing hallucination.
+      </p>
+      <button onclick="generateLLMResponse()" style="margin-bottom: 1rem; align-self: flex-start;">4. Generate LLM Answer</button>
+      <div id="llmOutput" class="output-response">
+        Waiting for generation step...
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // In-memory Vector Database storage
+    let vectorDatabase = [];
+    let topRetrieved = [];
+
+    // Simple TF-IDF / Bag of Words Mock Embedding Function
+    // Maps text to a normalized frequency vector over a mock vocabulary
+    function generateMockEmbedding(text) {
+      const vocab = ["jwst", "telescope", "launched", "infrared", "mirror", "beryllium", "hubble", "orbit", "l2", "earth", "gold", "dust"];
+      const words = text.toLowerCase().match(/\w+/g) || [];
+      
+      let vector = vocab.map(term => {
+        return words.filter(w => w === term).length;
+      });
+
+      // Normalize Vector (Magnitude = 1)
+      const magnitude = Math.sqrt(vector.reduce((sum, val) => sum + val * val, 0));
+      if (magnitude > 0) {
+        vector = vector.map(val => Number((val / magnitude).toFixed(3)));
+      }
+      return vector;
+    }
+
+    // Cosine Similarity Calculation
+    function cosineSimilarity(vecA, vecB) {
+      let dotProduct = 0;
+      let normA = 0;
+      let normB = 0;
+      for (let i = 0; i < vecA.length; i++) {
+        dotProduct += vecA[i] * vecB[i];
+        normA += vecA[i] * vecA[i];
+        normB += vecB[i] * vecB[i];
+      }
+      if (normA === 0 || normB === 0) return 0;
+      return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+    }
+
+    // STEP 1 & 2: Chunking & Building Index
+    function processDocuments() {
+      const rawText = document.getElementById("documentInput").value;
+      // Simple Chunking Strategy: Splitting by newlines/sentences
+      const sentences = rawText.split('\n').filter(s => s.trim().length > 0);
+      
+      vectorDatabase = sentences.map((sentence, index) => {
+        return {
+          id: `chunk-${index + 1}`,
+          text: sentence.trim(),
+          embedding: generateMockEmbedding(sentence)
+        };
+      });
+
+      renderVectorDB();
+    }
+
+    function renderVectorDB() {
+      const container = document.getElementById("chunksOutput");
+      container.innerHTML = "";
+
+      vectorDatabase.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "chunk-box";
+        div.id = `box-${item.id}`;
+        div.innerHTML = `
+          <strong>[${item.id}]</strong> ${item.text}
+          <span class="vector-tag">Embedding: [${item.embedding.join(", ")}]</span>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // STEP 3 & 4: Query Embedding & Vector Retrieval
+    function runRetrieval() {
+      if (vectorDatabase.length === 0) {
+        alert("Please run '1. Chunk & Build Vector Database' first!");
+        return;
+      }
+
+      const query = document.getElementById("queryInput").value;
+      const queryVector = generateMockEmbedding(query);
+
+      // Rank chunks by similarity score
+      const scoredChunks = vectorDatabase.map(chunk => {
+        const sim = cosineSimilarity(queryVector, chunk.embedding);
+        return { ...chunk, score: sim };
+      });
+
+      // Sort descending by score
+      scoredChunks.sort((a, b) => b.score - a.score);
+
+      // Select Top K=2
+      topRetrieved = scoredChunks.slice(0, 2).filter(c => c.score > 0);
+
+      renderRetrievalResults(topRetrieved);
+      buildAugmentedPrompt(query, topRetrieved);
+    }
+
+    function renderRetrievalResults(results) {
+      const container = document.getElementById("retrievedOutput");
+      container.innerHTML = "";
+
+      // Highlight in Vector DB view
+      document.querySelectorAll(".chunk-box").forEach(el => el.classList.remove("retrieved"));
+
+      if (results.length === 0) {
+        container.innerHTML = `<div style="color: var(--warning); font-size: 0.85rem;">No relevant context found (Similarity threshold low).</div>`;
+        return;
+      }
+
+      results.forEach(item => {
+        // Highlight in DB list
+        const dbElem = document.getElementById(`box-${item.id}`);
+        if(dbElem) dbElem.classList.add("retrieved");
+
+        // Display in Top-K list
+        const div = document.createElement("div");
+        div.className = "chunk-box retrieved";
+        div.innerHTML = `
+          <span class="similarity-tag">Score: ${(item.score * 100).toFixed(1)}%</span>
+          <strong>[${item.id}]</strong> ${item.text}
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // STEP 5: Augment Prompt
+    function buildAugmentedPrompt(query, retrievedItems) {
+      const contextText = retrievedItems.map(i => `- ${i.text}`).join("\n");
+
+      const prompt = 
+`[SYSTEM INSTRUCTION]
+Answer the question using ONLY the context provided below. If context is insufficient, state that you do not know.
+
+[RETRIEVED CONTEXT]
+${contextText || "No context retrieved."}
+
+[USER QUESTION]
+${query}`;
+
+      document.getElementById("augmentedPrompt").innerText = prompt;
+    }
+
+    // STEP 6: Simulated LLM Generation
+    function generateLLMResponse() {
+      const promptBox = document.getElementById("augmentedPrompt").innerText;
+      const outputElem = document.getElementById("llmOutput");
+
+      if (topRetrieved.length === 0) {
+        outputElem.innerText = "I cannot answer this question based on the provided context.";
+        outputElem.style.borderColor = "var(--warning)";
+        return;
+      }
+
+      outputElem.innerText = "Generating response based on retrieved facts...";
+      outputElem.style.borderColor = "var(--accent-color)";
+
+      setTimeout(() => {
+        // Simulate grounded LLM summary of retrieved context
+        const facts = topRetrieved.map(r => r.text).join(" ");
+        outputElem.innerHTML = `<strong>Ground Answer:</strong> Based on the retrieved documents, ${facts}`;
+        outputElem.style.borderColor = "var(--success)";
+      }, 600);
+    }
+
+    // Initial Auto Processing on Load
+    window.onload = () => {
+      processDocuments();
+    };
+  </script>
+</body>
+</html>
